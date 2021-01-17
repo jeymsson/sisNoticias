@@ -33,3 +33,11 @@ Route::put('news/update/{id}', 'NoticiaController@update');
 Route::delete('news/delete/{id}', 'NoticiaController@destroy');
 Route::get('news/me', 'NoticiaController@showMe2json');
 Route::get('news/type/{id}', 'NoticiaController@showty2json');
+
+// Route::get('usuario', 'UserController@index2json');
+// Route::get('usuario/{id}', 'UserController@show2json');
+Route::post('usuari/create', 'UserController@store');
+Route::put('usuari/update/{id}', 'UserController@update');
+Route::delete('usuari/delete/{id}', 'UserController@destroy');
+Route::get('usuari/me', 'UserController@showMe2json');
+Route::get('usuari/type/{id}', 'UserController@showty2json');
