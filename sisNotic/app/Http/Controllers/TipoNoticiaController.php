@@ -14,8 +14,17 @@ class TipoNoticiaController extends Controller
      */
     public function index()
     {
+        $base = $this->index2json();
+        dd($base);
+    }
+    public function index2json()
+    {
         $base = TipoNoticia::all();
-        dd(json_encode($base));
+        return json_encode($base);
+    }
+    public function show2json($id)
+    {
+        $base = TipoNoticia::find($id);
         return json_encode($base);
     }
 
@@ -37,7 +46,11 @@ class TipoNoticiaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $linha = new TipoNoticia();
+        $linha->jornalista = $request->input('jornalista');
+        $linha->descricao = $request->input('descricao');
+        $linha->save();
+        return json_encode($linha);
     }
 
     /**
@@ -69,9 +82,17 @@ class TipoNoticiaController extends Controller
      * @param  \App\TipoNoticia  $tipoNoticia
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, TipoNoticia $tipoNoticia)
+    public function update(Request $request, $id)
     {
-        //
+        $row = TipoNoticia::find($id);
+        if (isset($row)) {
+            $row->jornalista = $request->input('jornalista');
+            $row->descricao = $request->input('descricao');
+            $row->save();
+            // return response('OK', 200);
+            return json_encode($row);
+        }
+        return response('Tipo de noticia inexistente', 404);
     }
 
     /**
@@ -80,8 +101,13 @@ class TipoNoticiaController extends Controller
      * @param  \App\TipoNoticia  $tipoNoticia
      * @return \Illuminate\Http\Response
      */
-    public function destroy(TipoNoticia $tipoNoticia)
+    public function destroy($id)
     {
-        //
+        $row = TipoNoticia::find($id);
+        if (isset($row)) {
+            $row->delete();
+            return response('OK', 200);
+        }
+        return response('Tipo de noticia inexistente', 404);
     }
 }

@@ -16,3 +16,12 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+
+Route::get('tipo_noticia', 'TipoNoticiaController@index2json');
+Route::get('tipo_noticia/{id}', 'TipoNoticiaController@show2json');
+Route::post('tipo_noticia', 'TipoNoticiaController@store');
+Route::delete('tipo_noticia/{id}', 'TipoNoticiaController@destroy');
+Route::put('tipo_noticia/{id}', 'TipoNoticiaController@update');
+
