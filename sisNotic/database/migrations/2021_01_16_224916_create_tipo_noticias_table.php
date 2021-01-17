@@ -15,9 +15,10 @@ class CreateTipoNoticiasTable extends Migration
     {
         Schema::create('tipo_noticias', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('jornalista')->nullable($value = false);
+            $table->bigInteger('jornalista')->unsigned()->nullable($value = false);
             $table->string('descricao', 500)->nullable($value = false);
             $table->timestamps();
+            $table->foreign('jornalista')->references('id')->on('users');
         });
     }
 
