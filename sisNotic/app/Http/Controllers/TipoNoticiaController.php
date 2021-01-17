@@ -27,6 +27,13 @@ class TipoNoticiaController extends Controller
         $base = TipoNoticia::find($id);
         return json_encode($base);
     }
+    public function showMe2json()
+    {
+        // return response('NAO IMPLEMENTADO', 424);
+        $id = 2;
+        $base = TipoNoticia::where('jornalista', '=', $id)->get();
+        return json_encode($base);
+    }
 
     /**
      * Show the form for creating a new resource.
