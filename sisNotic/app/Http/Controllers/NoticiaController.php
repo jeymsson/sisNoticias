@@ -14,7 +14,31 @@ class NoticiaController extends Controller
      */
     public function index()
     {
-        //
+        $base = $this->index2json();
+        dd($base);
+    }
+    public function index2json()
+    {
+        $base = Noticia::all();
+        return json_encode($base);
+    }
+    public function show2json($id)
+    {
+        $base = Noticia::find($id);
+        return json_encode($base);
+    }
+    public function showMe2json()
+    {
+        // return response('NAO IMPLEMENTADO', 424);
+        $id = 2;
+        $base = Noticia::where('jornalista', '=', $id)->get();
+        return json_encode($base);
+    }
+    public function showty2json($id)
+    {
+        // return response('NAO IMPLEMENTADO', 424);
+        $base = Noticia::where('tipo', '=', $id)->get();
+        return json_encode($base);
     }
 
     /**
@@ -35,16 +59,32 @@ class NoticiaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if(!empty($row->jornalista) &&
+        !empty($row->tipo) &&
+        !empty($row->titulo) &&
+        !empty($row->descricao) &&
+        !empty($row->corpon)){
+            $linha = new Noticia();
+            $linha->jornalista = $request->input('jornalista');
+            $linha->tipo = $request->input('tipo');
+            $linha->titulo = $request->input('titulo');
+            $linha->descricao = $request->input('descricao');
+            $linha->corpon = $request->input('corpon');
+            $linha->link = $request->input('link');
+            $linha->save();
+            return json_encode($linha);
+        } else {
+            return response('Campos obrigatorios nao preenchidos.', 404);
+        }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Noticia  $noticia
+     * @param  \App\TipoNoticia  $tipoNoticia
      * @return \Illuminate\Http\Response
      */
-    public function show(Noticia $noticia)
+    public function show(TipoNoticia $tipoNoticia)
     {
         //
     }
@@ -52,10 +92,10 @@ class NoticiaController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Noticia  $noticia
+     * @param  \App\TipoNoticia  $tipoNoticia
      * @return \Illuminate\Http\Response
      */
-    public function edit(Noticia $noticia)
+    public function edit(TipoNoticia $tipoNoticia)
     {
         //
     }
@@ -64,22 +104,47 @@ class NoticiaController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Noticia  $noticia
+     * @param  \App\TipoNoticia  $tipoNoticia
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Noticia $noticia)
+    public function update(Request $request, $id)
     {
-        //
+        $row = Noticia::find($id);
+        if (isset($row)) {
+            if(!empty($row->jornalista) &&
+            !empty($row->tipo) &&
+            !empty($row->titulo) &&
+            !empty($row->descricao) &&
+            !empty($row->corpon)){
+                $row->jornalista = $request->input('jornalista');
+                $row->tipo = $request->input('tipo');
+                $row->titulo = $request->input('titulo');
+                $row->descricao = $request->input('descricao');
+                $row->corpon = $request->input('corpon');
+                $row->link = $request->input('link');
+                $row->save();
+                // return response('OK', 200);
+                return json_encode($row);
+            } else {
+                return response('Campos obrigatorios nao preenchidos.', 404);
+            }
+        }
+        return response('Noticia inexistente', 404);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Noticia  $noticia
+     * @param  \App\TipoNoticia  $tipoNoticia
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Noticia $noticia)
+    public function destroy($id)
     {
-        //
+        $row = Noticia::find($id);
+        if (isset($row)) {
+            $row->delete();
+            return response('OK', 200);
+        }
+        return response('Noticia inexistente', 404);
     }
 }

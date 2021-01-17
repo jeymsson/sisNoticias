@@ -26,3 +26,10 @@ Route::put('type/update/{id}', 'TipoNoticiaController@update');
 Route::delete('type/delete/{id}', 'TipoNoticiaController@destroy');
 Route::get('type/me', 'TipoNoticiaController@showMe2json');
 
+// Route::get('news', 'NoticiaController@index2json');
+// Route::get('news/{id}', 'NoticiaController@show2json');
+Route::post('news/create', 'NoticiaController@store');
+Route::put('news/update/{id}', 'NoticiaController@update');
+Route::delete('news/delete/{id}', 'NoticiaController@destroy');
+Route::get('news/me', 'NoticiaController@showMe2json');
+Route::get('news/type/{id}', 'NoticiaController@showty2json');
