@@ -30,7 +30,7 @@ class UserController extends Controller
     public function showMe2json()
     {
         // return response('NAO IMPLEMENTADO', 424);
-        $id = 2;
+        $id = $user->id;
         $base = User::where('jornalista', '=', $id)->get();
         return json_encode($base);
     }
