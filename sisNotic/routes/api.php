@@ -17,27 +17,42 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+// Route::prefix('usuario')->group(function(){
+    Route::post('register', 'AutenticadorController@registrar');
+    Route::post('login', 'AutenticadorController@login');
+
+    Route::middleware('auth:api')->group(function(){
+        Route::post('deslog', 'AutenticadorController@logout');
+        Route::post('me', 'AutenticadorController@showme');
+    });
+// });
 
 
-// Route::get('tipo_noticia', 'TipoNoticiaController@index2json');
-// Route::get('tipo_noticia/{id}', 'TipoNoticiaController@show2json');
-Route::post('type/create', 'TipoNoticiaController@store');
-Route::put('type/update/{id}', 'TipoNoticiaController@update');
-Route::delete('type/delete/{id}', 'TipoNoticiaController@destroy');
-Route::get('type/me', 'TipoNoticiaController@showMe2json');
+Route::prefix('type')->group(function(){
+    Route::middleware('auth:api')->group(function(){
+        Route::post('create', 'TipoNoticiaController@store');
+        Route::post('update/{id}', 'TipoNoticiaController@update');
+        Route::post('delete/{id}', 'TipoNoticiaController@destroy');
+        Route::get('me', 'TipoNoticiaController@showMe2json');
+    });
+});
 
+Route::prefix('news')->group(function(){
+    Route::middleware('auth:api')->group(function(){
+        Route::post('create', 'NoticiaController@store');
+        Route::post('update/{id}', 'NoticiaController@update');
+        Route::post('delete/{id}', 'NoticiaController@destroy');
+        Route::get('me', 'NoticiaController@showMe2json');
+        Route::get('type/{id}', 'NoticiaController@showty2json');
+    });
+});
 // Route::get('news', 'NoticiaController@index2json');
 // Route::get('news/{id}', 'NoticiaController@show2json');
-Route::post('news/create', 'NoticiaController@store');
-Route::put('news/update/{id}', 'NoticiaController@update');
-Route::delete('news/delete/{id}', 'NoticiaController@destroy');
-Route::get('news/me', 'NoticiaController@showMe2json');
-Route::get('news/type/{id}', 'NoticiaController@showty2json');
 
 // Route::get('usuario', 'UserController@index2json');
 // Route::get('usuario/{id}', 'UserController@show2json');
-Route::post('usuari/create', 'UserController@store');
-Route::put('usuari/update/{id}', 'UserController@update');
-Route::delete('usuari/delete/{id}', 'UserController@destroy');
-Route::get('usuari/me', 'UserController@showMe2json');
-Route::get('usuari/type/{id}', 'UserController@showty2json');
+// Route::post('usuari/create', 'UserController@store');
+// Route::put('usuari/update/{id}', 'UserController@update');
+// Route::delete('usuari/delete/{id}', 'UserController@destroy');
+// Route::get('usuari/me', 'UserController@showMe2json');
+
