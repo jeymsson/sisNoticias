@@ -20,19 +20,19 @@ class TipoNoticiaController extends Controller
     public function index2json()
     {
         $base = TipoNoticia::all();
-        return json_encode($base);
+        return response()->json($base);
     }
     public function show2json($id)
     {
         $base = TipoNoticia::find($id);
-        return json_encode($base);
+        return response()->json($base);
     }
-    public function showMe2json()
+    public function showMe2json(Request $req)
     {
         // return response('NAO IMPLEMENTADO', 424);
-        $id = 2;
+        $id = $req->user()->id;
         $base = TipoNoticia::where('jornalista', '=', $id)->get();
-        return json_encode($base);
+        return response()->json($base);
     }
 
     /**
@@ -53,11 +53,18 @@ class TipoNoticiaController extends Controller
      */
     public function store(Request $request)
     {
+        $validator = \Validator::make($request->all(), [
+            'jornalista' => 'required|int',
+            'descricao' => 'required|string'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['res'=>'Parametros incorretos.','err'=>$validator->errors()], 401);
+        }
         $linha = new TipoNoticia();
         $linha->jornalista = $request->input('jornalista');
         $linha->descricao = $request->input('descricao');
         $linha->save();
-        return json_encode($linha);
+        return response()->json($linha);
     }
 
     /**
@@ -91,15 +98,22 @@ class TipoNoticiaController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $validator = \Validator::make($request->all(), [
+            'jornalista' => 'required|int',
+            'descricao' => 'required|string'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['res'=>'Parametros incorretos.','err'=>$validator->errors()], 401);
+        }
         $row = TipoNoticia::find($id);
         if (isset($row)) {
             $row->jornalista = $request->input('jornalista');
             $row->descricao = $request->input('descricao');
             $row->save();
             // return response('OK', 200);
-            return json_encode($row);
+            return response()->json($row);
         }
-        return response('Tipo de noticia inexistente', 404);
+        return response()->json('Tipo de noticia inexistente', 404);
     }
 
     /**
@@ -113,8 +127,8 @@ class TipoNoticiaController extends Controller
         $row = TipoNoticia::find($id);
         if (isset($row)) {
             $row->delete();
-            return response('OK', 200);
+            return response()->json('OK', 200);
         }
-        return response('Tipo de noticia inexistente', 404);
+        return response()->json('Tipo de noticia inexistente', 404);
     }
 }

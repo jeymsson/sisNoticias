@@ -20,25 +20,26 @@ class NoticiaController extends Controller
     public function index2json()
     {
         $base = Noticia::all();
-        return json_encode($base);
+        return response()->json($base);
     }
     public function show2json($id)
     {
         $base = Noticia::find($id);
-        return json_encode($base);
+        return response()->json($base);
     }
-    public function showMe2json()
+    public function showMe2json(Request $req)
     {
-        // return response('NAO IMPLEMENTADO', 424);
-        $id = 2;
+        // return response()->json('NAO IMPLEMENTADO', 424);
+        $id = $req->user()->id;
         $base = Noticia::where('jornalista', '=', $id)->get();
-        return json_encode($base);
+        // return response()->json($base);
+        return response()->json($base);
     }
     public function showty2json($id)
     {
-        // return response('NAO IMPLEMENTADO', 424);
+        // return response()->json('NAO IMPLEMENTADO', 424);
         $base = Noticia::where('tipo', '=', $id)->get();
-        return json_encode($base);
+        return response()->json($base);
     }
 
     /**
@@ -59,23 +60,25 @@ class NoticiaController extends Controller
      */
     public function store(Request $request)
     {
-        if(!empty($row->jornalista) &&
-        !empty($row->tipo) &&
-        !empty($row->titulo) &&
-        !empty($row->descricao) &&
-        !empty($row->corpon)){
-            $linha = new Noticia();
-            $linha->jornalista = $request->input('jornalista');
-            $linha->tipo = $request->input('tipo');
-            $linha->titulo = $request->input('titulo');
-            $linha->descricao = $request->input('descricao');
-            $linha->corpon = $request->input('corpon');
-            $linha->link = $request->input('link');
-            $linha->save();
-            return json_encode($linha);
-        } else {
-            return response('Campos obrigatorios nao preenchidos.', 404);
+        $validator = \Validator::make($request->all(), [
+            'jornalista' => 'required|int',
+            'tipo' => 'required|int',
+            'titulo' => 'required|string',
+            'descricao' => 'required|string',
+            'corpon' => 'required|string'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['res'=>'Parametros incorretos.','err'=>$validator->errors()], 401);
         }
+        $linha = new Noticia();
+        $linha->jornalista = $request->input('jornalista');
+        $linha->tipo = $request->input('tipo');
+        $linha->titulo = $request->input('titulo');
+        $linha->descricao = $request->input('descricao');
+        $linha->corpon = $request->input('corpon');
+        $linha->link = $request->input('link');
+        $linha->save();
+        return response()->json($linha);
     }
 
     /**
@@ -109,27 +112,29 @@ class NoticiaController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $validator = \Validator::make($request->all(), [
+            'jornalista' => 'required|int',
+            'tipo' => 'required|int',
+            'titulo' => 'required|string',
+            'descricao' => 'required|string',
+            'corpon' => 'required|string'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['res'=>'Parametros incorretos.','err'=>$validator->errors()], 401);
+        }
         $row = Noticia::find($id);
         if (isset($row)) {
-            if(!empty($row->jornalista) &&
-            !empty($row->tipo) &&
-            !empty($row->titulo) &&
-            !empty($row->descricao) &&
-            !empty($row->corpon)){
-                $row->jornalista = $request->input('jornalista');
-                $row->tipo = $request->input('tipo');
-                $row->titulo = $request->input('titulo');
-                $row->descricao = $request->input('descricao');
-                $row->corpon = $request->input('corpon');
-                $row->link = $request->input('link');
-                $row->save();
-                // return response('OK', 200);
-                return json_encode($row);
-            } else {
-                return response('Campos obrigatorios nao preenchidos.', 404);
-            }
+            $row->jornalista = $request->input('jornalista');
+            $row->tipo = $request->input('tipo');
+            $row->titulo = $request->input('titulo');
+            $row->descricao = $request->input('descricao');
+            $row->corpon = $request->input('corpon');
+            $row->link = $request->input('link');
+            $row->save();
+            // return response()->json('OK', 200);
+            return response()->json($row);
         }
-        return response('Noticia inexistente', 404);
+        return response()->json('Noticia inexistente', 404);
     }
 
     /**
@@ -143,8 +148,8 @@ class NoticiaController extends Controller
         $row = Noticia::find($id);
         if (isset($row)) {
             $row->delete();
-            return response('OK', 200);
+            return response()->json('OK', 200);
         }
-        return response('Noticia inexistente', 404);
+        return response()->json('Noticia inexistente', 404);
     }
 }
