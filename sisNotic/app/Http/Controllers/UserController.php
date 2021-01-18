@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class NoticiaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -30,7 +30,7 @@ class UserController extends Controller
     public function showMe2json()
     {
         // return response('NAO IMPLEMENTADO', 424);
-        $id = $user->id;
+        $id = 2;
         $base = User::where('jornalista', '=', $id)->get();
         return json_encode($base);
     }
@@ -63,10 +63,10 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\User  $User
+     * @param  \App\TipoNoticia  $tipoNoticia
      * @return \Illuminate\Http\Response
      */
-    public function show(User $User)
+    public function show(TipoNoticia $tipoNoticia)
     {
         //
     }
@@ -74,10 +74,10 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\User  $User
+     * @param  \App\TipoNoticia  $tipoNoticia
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $User)
+    public function edit(TipoNoticia $tipoNoticia)
     {
         //
     }
@@ -86,7 +86,7 @@ class UserController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\User  $User
+     * @param  \App\TipoNoticia  $tipoNoticia
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -105,7 +105,7 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\User  $User
+     * @param  \App\TipoNoticia  $tipoNoticia
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

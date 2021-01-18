@@ -18,12 +18,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 // Route::prefix('usuario')->group(function(){
-    Route::post('register', 'AutenticadorController@store');
+    Route::post('register', 'AutenticadorController@registrar');
     Route::post('login', 'AutenticadorController@login');
-    Route::post('me', 'AutenticadorController@showme');
 
     Route::middleware('auth:api')->group(function(){
         Route::post('deslog', 'AutenticadorController@logout');
+        Route::post('me', 'AutenticadorController@showme');
     });
 // });
 

@@ -17,18 +17,20 @@ class AutenticadorController extends Controller
             'senha' => 'required|string|confirmed'
         ]);*/
         $validator = \Validator::make($req->all(), [
-            'name' => 'required|string',
+            'nome' => 'required|string',
+            'sobrenome' => 'required|string',
             'email' => 'required|string|email|unique:users',
-            'senha' => 'required|string|confirmed'
+            'senha' => 'required|string'
         ]);
         if ($validator->fails()) {
             return response()->json(['res'=>'Parametros incorretos.','err'=>$validator->errors()], 401);
         }
 
         $usu = new User([
-            'name' => $req->name,
+            'name' => $req->nome,
+            'sobrenome' => $req->sobrenome,
             'email' => $req->email,
-            'senha' => bcrypt($req->senha)
+            'password' => bcrypt($req->senha)
         ]);
         $usu->save();
         // return json_encode($usu);
@@ -50,12 +52,10 @@ class AutenticadorController extends Controller
             // return response()->json($validator->errors(), Response::HTTP_BAD_REQUEST);
             return response()->json(['res'=>'Parametros incorretos.','err'=>$validator->errors()], 401);
         }
-
         if(!Auth::attempt(['email' => $req->email, 'password' => $req->senha])){
             return response()->json(['res'=>'Não logado.'], 401);
         }
-        $user = $req->user();
-        $obt = $user->createToken('token');
+        $obt = $req->user()->createToken('token');
         $tkn = $obt->accessToken;
         $req->headers->add(['Authorization' => 'Bearer '. $tkn]);
         return response()->json(['res'=>'Logado agora.', 'Token'=>$tkn], 200);
@@ -63,27 +63,9 @@ class AutenticadorController extends Controller
     public function showme(Request $req)
     {
         //
-        /*$req->validate([
-            'email' => 'required|string|email',
-            'senha' => 'required|string'
-        ]);*/
-        $validator = \Validator::make($req->all(), [
-            'email' => 'required|string|email',
-            'senha' => 'required|string'
-        ]);
-        if ($validator->fails()) {
-            // return response()->json($validator->errors(), Response::HTTP_BAD_REQUEST);
-            return response()->json(['res'=>'Parametros incorretos.','err'=>$validator->errors()], 401);
-        }
-
-        if(!Auth::attempt(['email' => $req->email, 'password' => $req->senha])){
-            return response()->json(['res'=>'Não logado.'], 401);
-        }
-        $user = $req->user();
-        $obt = $user->createToken('token');
-        $tkn = $obt->accessToken;
-        $req->headers->add(['Authorization' => 'Bearer '. $tkn]);
-        return response()->json(['res'=>'Logado agora.', 'Token'=>$tkn], 200);
+        $id = $req->user()->id;
+        $base = User::find($id);
+        return response()->json($base, 200);
     }
 
     public function logout(Request $req)

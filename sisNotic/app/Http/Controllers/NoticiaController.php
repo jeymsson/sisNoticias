@@ -27,10 +27,10 @@ class NoticiaController extends Controller
         $base = Noticia::find($id);
         return response()->json($base);
     }
-    public function showMe2json()
+    public function showMe2json(Request $req)
     {
         // return response()->json('NAO IMPLEMENTADO', 424);
-        $id = 2;
+        $id = $req->user()->id;
         $base = Noticia::where('jornalista', '=', $id)->get();
         // return response()->json($base);
         return response()->json($base);

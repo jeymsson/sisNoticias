@@ -34,6 +34,13 @@ class TipoNoticiaController extends Controller
         $base = TipoNoticia::where('jornalista', '=', $id)->get();
         return response()->json($base);
     }
+    public function userme(Request $req)
+    {
+        // return response('NAO IMPLEMENTADO', 424);
+        $id = $req->user()->id;
+        $base = TipoNoticia::where('jornalista', '=', $id)->get();
+        return response()->json($base);
+    }
 
     /**
      * Show the form for creating a new resource.
